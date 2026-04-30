@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KantinHub | Jajan Jadi Mudah</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body id="app-body">
+    <nav class="navbar sticky-top bg-white border-bottom shadow-sm">
+      <div class="container d-flex justify-content-between align-items-center">
+        <a href="#" onclick="showSection('home')">
+          <img
+            src="Kantin_Hub.png"
+            id="navbar-logo"
+            onerror="
+              this.src = 'https://via.placeholder.com/120x40?text=KantinHub'
+            "
+          />
+        </a>
+        <div id="auth-area">
+          <button
+            class="btn btn-warning btn-sm fw-bold rounded-pill px-4"
+            id="loginBtn"
+            data-bs-toggle="modal"
+            data-bs-target="#loginModal"
+          >
+            Masuk
+          </button>
+          <div id="userProfile" class="d-none dropdown">
+            <button
+              class="btn btn-light btn-sm fw-bold dropdown-toggle rounded-pill"
+              data-bs-toggle="dropdown"
+              id="userDisplayName"
+            ></button>
+            <ul
+              class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 mt-2"
+            >
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  onclick="showSection('history')"
+                  ><i class="bi bi-clock-history me-2"></i>Riwayat</a
+                >
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a
+                  class="dropdown-item text-danger"
+                  href="#"
+                  onclick="doLogout()"
+                  ><i class="bi bi-box-arrow-right me-2"></i>Keluar</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container mt-3">
+      <div id="home-section">
+        <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner shadow-sm">
+            <div class="carousel-item active">
+              <img
+                src="Gambar/semua kantin.jpg"
+                w="800"
+                class="d-block w-100"
+              />
+            </div>
+
+            <div class="carousel-item">
+              <img
+                src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800"
+                class="d-block w-100"
+              />
+            </div>
+
+            <div class="carousel-item">
+              <img
+                src="https://images.unsplash.com/photo-1493770348161-369560ae357d?w=800"
+                class="d-block w-100"
+              />
+            </div>
+
+            <div class="carousel-item">
+              <img
+                src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800"
+                class="d-block w-100"
+              />
+            </div>
+          </div>
+        </div>
+
+        <h5 class="fw-bold mt-4 mb-3">Daftar Kantin</h5>
+        <div class="row g-3" id="kantin-container"></div>
+
+        <section class="review-container">
+          <h5 class="fw-bold mb-3">Ulasan Pengguna</h5>
+          <div id="reviews-list">
+            <div class="review-item">
+              <div class="d-flex justify-content-between small">
+                <span class="fw-bold">Rizky Ramadhan</span>
+              </div>
+              <p class="small text-muted mb-0">
+                Antarmuka makin keren dan informatif!
+              </p>
+            </div>
+            <div class="review-item">
+              <div class="d-flex justify-content-between small">
+                <span class="fw-bold">Rafidzzz</span>
+              </div>
+              <p class="small text-muted mb-0">Hebat</p>
+            </div>
+            <div class="review-item">
+              <div class="d-flex justify-content-between small">
+                <span class="fw-bold">Yudhanta</span>
+              </div>
+              <p class="small text-muted mb-0">Terima Kasih untuk Webnya!!</p>
+            </div>
+          </div>
+          <div class="mt-3">
+            <input
+              type="text"
+              id="reviewerName"
+              class="form-control mb-2"
+              placeholder="Nama Anda"
+            />
+            <textarea
+              id="reviewText"
+              class="form-control mb-2"
+              placeholder="Tulis ulasan..."
+            ></textarea>
+            <button class="btn btn-warning btn-sm w-100" onclick="addReview()">
+              Kirim Ulasan
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <div id="katalog-section" class="mt-4 d-none">
+        <div class="d-flex align-items-center gap-3 mb-4">
+          <button
+            class="btn btn-white shadow-sm rounded-circle"
+            onclick="showSection('home')"
+          >
+            <i class="bi bi-arrow-left"></i>
+          </button>
+          <h4 id="kantin-name-title" class="fw-bold mb-0">Menu</h4>
+        </div>
+        <div class="row g-3" id="menu-container"></div>
+      </div>
+
+      <div id="checkout-section" class="mt-4 d-none">
+        <h4 class="fw-bold mb-4">Pembayaran</h4>
+        <div class="card border-0 shadow-sm rounded-4 p-4 mb-3">
+          <div id="cart-summary-list"></div>
+          <hr />
+          <div class="mb-3">
+            <label class="fw-bold small mb-2">Catatan Pesanan</label>
+            <textarea
+              id="orderNote"
+              class="form-control rounded-3"
+              placeholder="Contoh: Tidak pedas..."
+            ></textarea>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted">Total</span>
+            <h3 class="fw-800 text-warning mb-0" id="final-price-display">
+              Rp 0
+            </h3>
+          </div>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+          <h6 class="fw-bold mb-3">Pilih Metode Pembayaran</h6>
+          <div class="d-flex gap-2">
+            <input
+              type="radio"
+              class="btn-check"
+              name="payMethod"
+              id="methodTunai"
+              value="Tunai"
+              checked
+              onchange="toggleQR()"
+            />
+            <label
+              class="btn btn-outline-warning flex-fill py-3 fw-bold rounded-3"
+              for="methodTunai"
+            >
+              <i class="bi bi-cash-stack d-block mb-1 fs-4"></i> TUNAI
+            </label>
+
+            <input
+              type="radio"
+              class="btn-check"
+              name="payMethod"
+              id="methodQRIS"
+              value="QRIS"
+              onchange="toggleQR()"
+            />
+            <label
+              class="btn btn-outline-warning flex-fill py-3 fw-bold rounded-3"
+              for="methodQRIS"
+            >
+              <i class="bi bi-qr-code-scan d-block mb-1 fs-4"></i> QRIS
+            </label>
+          </div>
+
+          <div id="qr-area" class="text-center mt-4 d-none">
+            <img
+              src="qr kantin.png"
+              class="img-fluid border p-2"
+              style="max-width: 160px"
+              onerror="
+                this.src =
+                  'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=KantinHub'
+              "
+            />
+          </div>
+        </div>
+
+        <button
+          class="btn btn-warning w-100 py-3 fw-bold rounded-4 shadow"
+          onclick="confirmPayment()"
+        >
+          KONFIRMASI BAYAR
+        </button>
+      </div>
+
+      <div id="history-section" class="mt-4 d-none">
+        <h4 class="fw-bold mb-3">Riwayat Pesanan</h4>
+        <div id="history-list"></div>
+      </div>
+    </main>
+
+    <div id="floating-cart" class="d-none" onclick="showSection('checkout')">
+      <div class="d-flex align-items-center">
+        <div
+          class="bg-warning text-dark fw-bold rounded-circle d-flex align-items-center justify-content-center me-3"
+          style="width: 35px; height: 35px"
+          id="cart-badge-count"
+        >
+          0
+        </div>
+        <div class="fw-bold" id="cart-badge-total">Rp 0</div>
+      </div>
+      <div class="fw-bold">Bayar <i class="bi bi-chevron-right"></i></div>
+    </div>
+
+    <!-- Login Modal dengan Placeholder Baru -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-5 shadow-lg">
+          <div class="modal-body p-5">
+            <h4 class="fw-800 text-center mb-4">Masuk KantinHub</h4>
+            <form id="loginForm">
+              <div class="mb-3">
+                <input
+                  type="text"
+                  id="loginUser"
+                  class="form-control p-3 rounded-3 border-light bg-light"
+                  placeholder="masukan nama"
+                  required
+                  minlength="5"
+                />
+              </div>
+              <div class="mb-4">
+                <input
+                  type="password"
+                  id="loginPass"
+                  class="form-control p-3 rounded-3 border-light bg-light"
+                  placeholder="masukan password"
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                id="loginBtn"
+                class="btn btn-warning w-100 py-3 fw-bold rounded-3"
+              >
+                MASUK
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="adminModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 rounded-5 shadow-lg">
+          <div class="modal-header border-0 px-4 pt-4">
+            <h5 class="fw-bold">Panel Manajemen Kantin</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body px-4 pb-5">
+            <div class="card bg-light border-0 rounded-4 p-3 mb-4">
+              <h6 class="fw-bold mb-3">
+                <i class="bi bi-plus-circle me-2"></i>Tambah Menu Baru
+              </h6>
+              <div class="row g-2">
+                <div class="col-6">
+                  <input
+                    type="text"
+                    id="newMenuName"
+                    class="form-control"
+                    placeholder="Nama Makanan"
+                  />
+                </div>
+                <div class="col-6">
+                  <input
+                    type="number"
+                    id="newMenuPrice"
+                    class="form-control"
+                    placeholder="Harga (Rp)"
+                  />
+                </div>
+                <div class="col-12">
+                  <input
+                    type="text"
+                    id="newMenuImg"
+                    class="form-control"
+                    placeholder="URL Foto"
+                  />
+                </div>
+                <div class="col-12 mt-2">
+                  <button
+                    class="btn btn-warning w-100 fw-bold"
+                    onclick="addNewMenu()"
+                  >
+                    TAMBAHKAN KE MENU
+                  </button>
+                </div>
+              </div>
+            </div>
+            <h6 class="fw-bold mb-3">Pesanan Masuk</h6>
+            <div id="admin-orders-list" class="small text-muted">
+              Belum ada pesanan.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="successModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 p-4 text-center">
+          <div class="fs-1 text-success mb-3">
+            <i class="bi bi-check-circle-fill"></i>
+          </div>
+          <h4 class="fw-bold">Pesanan Berhasil!</h4>
+          <p class="text-muted">Terima kasih, pesanan Anda sedang disiapkan.</p>
+          <button
+            class="btn btn-warning w-100 py-2 fw-bold rounded-3"
+            data-bs-dismiss="modal"
+          >
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="mt-5 py-5 bg-light border-top">
+      <div class="container text-center">
+        <h6 class="fw-bold mb-3">KantinHub</h6>
+        <p class="small text-muted mb-4">
+          Dibuat oleh: <b>Tama | Rafid | Yudha</b><br />
+          <span class="text-secondary">Kelompok 2 - X PPLG A</span>
+        </p>
+
+        <div class="d-flex justify-content-center gap-4 mb-4">
+          <a
+            href="https://www.instagram.com/tamxzy_?igsh=bGFlaWdpZjQyOW1j"
+            target="_blank"
+            class="text-dark"
+          >
+            <i class="bi bi-instagram fs-3"></i>
+          </a>
+          <a
+            href="https://discord.gg/aXH8fGVG7m"
+            target="_blank"
+            class="text-dark"
+          >
+            <i class="bi bi-discord fs-3"></i>
+          </a>
+          <a href="https://www.youtube.com/@T4m5" class="text-dark">
+            <i class="bi bi-youtube fs-3"></i>
+          </a>
+        </div>
+
+        <p class="small text-muted">
+          &copy; 2026 KantinHub. Kasih Kasih Kasih.
+        </p>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
