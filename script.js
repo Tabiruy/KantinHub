@@ -485,3 +485,63 @@ document.getElementById(`review-form-${index}`).innerHTML = `
     </div>`;
 
 // Jika ingin otomatis scroll ke ulasan di home, bisa gunakan showSection('home')
+
+async function renderKantin() {
+  const { data: kantins, error } = await supabase.from("kantins").select("*");
+
+  if (error) return console.error(error);
+
+  const container = document.getElementById("kantin-container");
+  container.innerHTML = kantins
+    .map(
+      (k) => `
+    <div class="col-6 col-md-4" onclick="showKatalog(${k.id}, '${k.nama}')">
+      <div class="card border-0 shadow-sm rounded-4 p-3 text-center h-100">
+        <div class="fs-1 mb-2">${k.icon}</div>
+        <h6 class="fw-bold mb-0">${k.nama}</h6>
+      </div>
+    </div>
+  `,
+    )
+    .join("");
+}
+
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = document.getElementById("loginUser").value; // Pastikan input berupa email
+  const password = document.getElementById("loginPass").value;
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    alert("Login Gagal: " + error.message);
+  } else {
+    activeUser = data.user;
+    location.reload(); // Refresh untuk memperbarui UI
+  }
+});
+async function confirmPayment() {
+  const method = document.querySelector(
+    'input[name="payMethod"]:checked',
+  ).value;
+  const note = document.getElementById("orderNote").value;
+
+  const { data, error } = await supabase.from("orders").insert([
+    {
+      user_id: activeUser.id,
+      items: cart,
+      total: calculateTotal(),
+      method: method,
+      note: note,
+    },
+  ]);
+
+  if (!error) {
+    cart = [];
+    bootstrap.Modal.getInstance(document.getElementById("successModal")).show();
+    showSection("home");
+  }
+}
