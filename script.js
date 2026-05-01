@@ -246,11 +246,14 @@ async function confirmPayment() {
     .map(([nama, qty]) => `${nama} (x${qty})`)
     .join(", ");
 
+  const payMethod = document.querySelector('input[name="payMethod"]:checked').value;
+
   const payload = {
     kantin_id: cart[0].kantin_id,
     username: activeUser,
     items: itemsString,
     total_price: totalHarga,
+    payment_method: payMethod,
     note: document.getElementById("orderNote").value,
     created_at: new Date().toISOString(),
   };
@@ -394,6 +397,7 @@ async function fetchHistory() {
       </div>
       <div class="mb-2 text-dark">${h.items}</div>
       ${h.note ? `<div class="small text-muted mb-2"><i class="bi bi-chat-text me-1"></i>Catatan: ${h.note}</div>` : ''}
+      <div class="small text-muted mb-2"><i class="bi bi-wallet2 me-1"></i>Metode: ${h.payment_method || 'Tunai'}</div>
       <div class="fw-bold text-warning border-top pt-2 mt-1">Total: Rp ${h.total_price.toLocaleString()}</div>
     </div>
   `,
@@ -422,6 +426,7 @@ async function fetchAdminOrders() {
       </div>
       <div class="my-2">${o.items}</div>
       ${o.note ? `<div class="small text-muted mb-2">Catatan: ${o.note}</div>` : ''}
+      <div class="small text-muted mb-2"><i class="bi bi-wallet2 me-1"></i>Metode: ${o.payment_method || 'Tunai'}</div>
       <div class="d-flex justify-content-between align-items-center mt-2 border-top pt-2">
         <div class="text-warning fw-bold">Rp ${o.total_price.toLocaleString()}</div>
         ${!o.is_completed ? `<button class="btn btn-sm btn-success fw-bold" onclick="completeOrder(${o.id})"><i class="bi bi-check-circle me-1"></i>Selesai</button>` : `<span class="badge bg-success"><i class="bi bi-check-all me-1"></i>Telah Selesai</span>`}
@@ -431,10 +436,11 @@ async function fetchAdminOrders() {
 }
 
 async function completeOrder(id) {
-  const btn = event.currentTarget;
-  btn.innerText = "Tunggu...";
-  btn.disabled = true;
-  await _supabase.from("orders").update({ is_completed: true }).eq("id", id);
+  const { error } = await _supabase.from("orders").update({ is_completed: true }).eq("id", id);
+  if (error) {
+    console.error("Gagal menyelesaikan pesanan:", error);
+    alert("Gagal memperbarui status. Pastikan tabel ter-update.");
+  }
   fetchAdminOrders();
 }
 

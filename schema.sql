@@ -30,6 +30,7 @@ CREATE TABLE orders (
   username TEXT NOT NULL,
   items TEXT NOT NULL,
   total_price INT NOT NULL,
+  payment_method TEXT,
   note TEXT,
   is_completed BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
