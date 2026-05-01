@@ -387,7 +387,7 @@ async function fetchHistory() {
     ? data
         .map(
           (h) => `
-    <div class="card border-0 shadow-sm p-3 mb-3 rounded-4">
+    <div class="card shadow-sm p-3 mb-3 rounded-4 border ${h.is_completed ? 'border-success border-2' : 'border-danger border-2'}">
       <div class="d-flex justify-content-between align-items-center mb-2">
         <div class="small fw-bold text-muted">${new Date(h.created_at).toLocaleString()}</div>
         <span class="badge ${h.is_completed ? 'bg-success' : 'bg-warning text-dark'}">${h.is_completed ? 'Selesai' : 'Diproses'}</span>

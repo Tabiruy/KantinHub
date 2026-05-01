@@ -45,12 +45,12 @@ CREATE TABLE reviews (
 
 -- Memasukkan data awal (dummy data) untuk tabel kantin
 INSERT INTO kantin (id, nama, icon) OVERRIDING SYSTEM VALUE VALUES 
-  (1, 'USMAN 1', '🍱'),
-  (2, 'USMAN 2', '🍲'),
-  (3, 'USMAN 3', '🍜'),
-  (4, 'USMAN 4', '🍹'),
-  (5, 'USMAN 7', '☕'),
-  (6, 'USMAN 8', '🍙');
+  (1, 'USMAN 1', '🫓'),
+  (2, 'USMAN 2', '🍡'),
+  (3, 'USMAN 3', '🍢'),
+  (4, 'USMAN 4', '🥤'),
+  (5, 'USMAN 7', '🍚'),
+  (6, 'USMAN 8', '🍗');
 
 -- Memasukkan data awal (dummy data) untuk tabel menu
 INSERT INTO menu (kantin_id, nama, harga, img) VALUES 
