@@ -289,13 +289,9 @@
                 />
               </div>
 
-              <button
-                type="submit"
-                id="loginBtn"
-                class="btn btn-warning w-100 py-3 fw-bold rounded-3"
-              >
-                MASUK
-              </button>
+              <form id="loginForm" onsubmit="handleLogin(event)">
+                <button type="submit" class="btn btn-primary">Masuk</button>
+              </form>
             </form>
           </div>
         </div>
