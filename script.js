@@ -471,7 +471,7 @@ function submitHistoryReview(index) {
 const html = `
     <div class="review-item">
         <div class="d-flex justify-content-between small">
-            <span class="fw-bold">${userName}</span>
+            <span class="fw-bold">${username}</span>
         </div>
         <p class="small text-muted mb-0">${reviewText}</p>
     </div>`;
@@ -487,7 +487,9 @@ document.getElementById(`review-form-${index}`).innerHTML = `
 // Jika ingin otomatis scroll ke ulasan di home, bisa gunakan showSection('home')
 
 async function renderKantin() {
-  const { data: kantins, error } = await supabase.from("kantins").select("*");
+  const { data: kantins, error } = await supabaseClient
+    .from("kantins")
+    .select("*");
 
   if (error) return console.error(error);
 
@@ -511,7 +513,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   const email = document.getElementById("loginUser").value; // Pastikan input berupa email
   const password = document.getElementById("loginPass").value;
 
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
     email,
     password,
   });
@@ -529,7 +531,7 @@ async function confirmPayment() {
   ).value;
   const note = document.getElementById("orderNote").value;
 
-  const { data, error } = await supabase.from("orders").insert([
+  const { data, error } = await supabaseClient.from("orders").insert([
     {
       user_id: activeUser.id,
       items: cart,
