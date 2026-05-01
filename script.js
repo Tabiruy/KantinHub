@@ -10,9 +10,6 @@ const SUPABASE_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNpaXFlZHJmb2NxemhoaHNidGJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1MTA4MzYsImV4cCI6MjA5MzA4NjgzNn0.jaPVyYSA7XXEISY41ieIKXQkRwZBcWndBJiqfZnzKqU";
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-let cart = [];
-let activeUser = null;
-
 // Data awal
 let dataKantin = [
   { id: 1, nama: "USMAN 1", icon: "🍗" },
