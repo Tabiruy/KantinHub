@@ -8,7 +8,7 @@ const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 // 2. STATE APLIKASI
 let cart = [];
 let activeUser = localStorage.getItem("kantinHubUser") || null;
-let isAdmin = false;
+let isAdmin = localStorage.getItem("kantinHubAdmin") === "true";
 let activeKantinId = null;
 
 let dataKantin = [];
@@ -16,16 +16,37 @@ let dataMenu = [];
 
 // 3. INISIALISASI
 document.addEventListener("DOMContentLoaded", () => {
-  if (activeUser) {
-    document.getElementById("loginBtn").classList.add("d-none");
-    document.getElementById("userProfile").classList.remove("d-none");
-    document.getElementById("userDisplayName").innerText = activeUser;
-  }
+  updateAuthUI();
   
   fetchKantin();
   fetchReviews();
   setupLoginForm();
 });
+
+function updateAuthUI() {
+  if (activeUser) {
+    document.getElementById("loginBtn").classList.add("d-none");
+    document.getElementById("userProfile").classList.remove("d-none");
+    document.getElementById("userDisplayName").innerText = activeUser;
+    
+    document.getElementById("review-form-area").classList.remove("d-none");
+    document.getElementById("review-login-msg").classList.add("d-none");
+    
+    if (isAdmin) {
+      document.getElementById("adminPanelBtn").classList.remove("d-none");
+      document.getElementById("adminDivider").classList.remove("d-none");
+    } else {
+      document.getElementById("adminPanelBtn").classList.add("d-none");
+      document.getElementById("adminDivider").classList.add("d-none");
+    }
+  } else {
+    document.getElementById("loginBtn").classList.remove("d-none");
+    document.getElementById("userProfile").classList.add("d-none");
+    
+    document.getElementById("review-form-area").classList.add("d-none");
+    document.getElementById("review-login-msg").classList.remove("d-none");
+  }
+}
 
 // 4. FUNGSI DATA DARI SUPABASE
 async function fetchKantin() {
@@ -167,6 +188,13 @@ function addToCart(menuId) {
   }
   const item = dataMenu.find((m) => m.id === menuId);
   if(item) {
+    if (cart.length > 0 && cart[0].kantin_id !== item.kantin_id) {
+      if (confirm("Keranjang Anda berisi makanan dari kantin lain. Ingin menghapus keranjang dan memesan dari kantin ini?")) {
+        cart = [];
+      } else {
+        return;
+      }
+    }
     cart.push(item);
     updateCartUI();
   }
@@ -257,11 +285,19 @@ function setupLoginForm() {
   document.getElementById("loginForm").onsubmit = (e) => {
     e.preventDefault();
     activeUser = document.getElementById("loginUser").value;
+    const pass = document.getElementById("loginPass").value;
+    
+    if (activeUser === "admin" && pass === "@dm1NC1huyy67") {
+      isAdmin = true;
+      localStorage.setItem("kantinHubAdmin", "true");
+    } else {
+      isAdmin = false;
+      localStorage.removeItem("kantinHubAdmin");
+    }
+
     localStorage.setItem("kantinHubUser", activeUser);
 
-    document.getElementById("loginBtn").classList.add("d-none");
-    document.getElementById("userProfile").classList.remove("d-none");
-    document.getElementById("userDisplayName").innerText = activeUser;
+    updateAuthUI();
 
     const modalEl = document.getElementById("loginModal");
     const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
@@ -271,10 +307,11 @@ function setupLoginForm() {
 
 function doLogout() {
   activeUser = null;
+  isAdmin = false;
   localStorage.removeItem("kantinHubUser");
+  localStorage.removeItem("kantinHubAdmin");
   
-  document.getElementById("loginBtn").classList.remove("d-none");
-  document.getElementById("userProfile").classList.add("d-none");
+  updateAuthUI();
   
   showSection("home");
 }
@@ -362,4 +399,133 @@ async function fetchHistory() {
         )
         .join("")
     : "<p class='text-center w-100 text-muted mt-4'>Belum ada pesanan.</p>";
+}
+
+// 9. FUNGSI PANEL ADMIN
+async function fetchAdminOrders() {
+  const container = document.getElementById("admin-orders-list");
+  container.innerHTML = "Memuat...";
+  
+  const { data, error } = await _supabase.from("orders").select("*").order("created_at", { ascending: false });
+  
+  if (error) {
+    container.innerHTML = "Gagal memuat pesanan.";
+    return;
+  }
+  
+  container.innerHTML = data.length ? data.map(o => `
+    <div class="card border-0 bg-white shadow-sm mb-2 p-3 rounded-4">
+      <div class="d-flex justify-content-between">
+        <b>${o.username}</b>
+        <span class="small">${new Date(o.created_at).toLocaleString()}</span>
+      </div>
+      <div>${o.items}</div>
+      ${o.note ? `<div class="small text-muted">Catatan: ${o.note}</div>` : ''}
+      <div class="text-warning fw-bold mt-1">Rp ${o.total_price.toLocaleString()}</div>
+    </div>
+  `).join("") : "Belum ada pesanan.";
+}
+
+async function fetchAdminMenus() {
+  const container = document.getElementById("admin-menu-list");
+  container.innerHTML = "Memuat menu...";
+  
+  const { data: menuData, error: menuErr } = await _supabase.from("menu").select("*, kantin(nama)").order("kantin_id", { ascending: true });
+  
+  if (menuErr) {
+    container.innerHTML = "Gagal memuat menu.";
+    return;
+  }
+  
+  let tableHTML = `
+    <table class="table table-sm align-middle">
+      <thead>
+        <tr>
+          <th>Menu</th>
+          <th>Kantin</th>
+          <th>Harga</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+  
+  menuData.forEach(m => {
+    tableHTML += `
+      <tr>
+        <td>
+          <img src="${m.img}" width="40" height="40" class="rounded object-fit-cover me-2">
+          ${m.nama}
+        </td>
+        <td>${m.kantin ? m.kantin.nama : m.kantin_id}</td>
+        <td>Rp ${m.harga.toLocaleString()}</td>
+        <td>
+          <button class="btn btn-sm btn-outline-secondary" onclick="updateMenuPhoto(${m.id})"><i class="bi bi-image"></i></button>
+          <button class="btn btn-sm btn-outline-danger" onclick="deleteMenu(${m.id})"><i class="bi bi-trash"></i></button>
+        </td>
+      </tr>
+    `;
+  });
+  
+  tableHTML += `</tbody></table>`;
+  container.innerHTML = tableHTML;
+  
+  const selectKantin = document.getElementById("newMenuKantin");
+  if (selectKantin && selectKantin.options.length <= 1) {
+    const { data: kData } = await _supabase.from("kantin").select("*");
+    if (kData) {
+      kData.forEach(k => {
+        const opt = document.createElement("option");
+        opt.value = k.id;
+        opt.innerText = k.nama;
+        selectKantin.appendChild(opt);
+      });
+    }
+  }
+}
+
+async function updateMenuPhoto(id) {
+  const newUrl = prompt("Masukkan URL foto baru (disarankan dari Unsplash/Pexels):");
+  if (newUrl) {
+    await _supabase.from("menu").update({ img: newUrl }).eq("id", id);
+    fetchAdminMenus();
+    if(activeKantinId) fetchMenu(activeKantinId);
+  }
+}
+
+async function deleteMenu(id) {
+  if (confirm("Yakin ingin menghapus menu ini?")) {
+    await _supabase.from("menu").delete().eq("id", id);
+    fetchAdminMenus();
+    if(activeKantinId) fetchMenu(activeKantinId);
+  }
+}
+
+async function addNewMenu() {
+  const kantinId = document.getElementById("newMenuKantin").value;
+  const nama = document.getElementById("newMenuName").value;
+  const harga = document.getElementById("newMenuPrice").value;
+  const img = document.getElementById("newMenuImg").value;
+  
+  if (!kantinId || !nama || !harga || !img) {
+    alert("Semua field harus diisi!");
+    return;
+  }
+  
+  const { error } = await _supabase.from("menu").insert([{
+    kantin_id: kantinId,
+    nama: nama,
+    harga: parseInt(harga),
+    img: img
+  }]);
+  
+  if (error) {
+    alert("Gagal menambah menu: " + error.message);
+  } else {
+    document.getElementById("newMenuName").value = "";
+    document.getElementById("newMenuPrice").value = "";
+    document.getElementById("newMenuImg").value = "";
+    fetchAdminMenus();
+    if(activeKantinId == kantinId) fetchMenu(kantinId);
+  }
 }

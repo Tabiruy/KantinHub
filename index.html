@@ -50,6 +50,18 @@
             >
               <li>
                 <a
+                  class="dropdown-item d-none"
+                  id="adminPanelBtn"
+                  href="#"
+                  data-bs-toggle="modal"
+                  data-bs-target="#adminModal"
+                  onclick="fetchAdminOrders(); fetchAdminMenus();"
+                  ><i class="bi bi-shield-lock me-2"></i>Panel Admin</a
+                >
+              </li>
+              <li><hr class="dropdown-divider" id="adminDivider" class="d-none" /></li>
+              <li>
+                <a
                   class="dropdown-item"
                   href="#"
                   onclick="showSection('history')"
@@ -134,20 +146,25 @@
             </div>
           </div>
           <div class="mt-3">
-            <input
-              type="text"
-              id="reviewerName"
-              class="form-control mb-2"
-              placeholder="Nama Anda"
-            />
-            <textarea
-              id="reviewText"
-              class="form-control mb-2"
-              placeholder="Tulis ulasan..."
-            ></textarea>
-            <button class="btn btn-warning btn-sm w-100" onclick="addReview()">
-              Kirim Ulasan
-            </button>
+            <div id="review-form-area" class="d-none">
+              <input
+                type="text"
+                id="reviewerName"
+                class="form-control mb-2"
+                placeholder="Nama Anda"
+              />
+              <textarea
+                id="reviewText"
+                class="form-control mb-2"
+                placeholder="Tulis ulasan..."
+              ></textarea>
+              <button class="btn btn-warning btn-sm w-100" onclick="addReview()">
+                Kirim Ulasan
+              </button>
+            </div>
+            <div id="review-login-msg" class="text-center text-muted small p-3 bg-light rounded-3">
+              Silakan login untuk memberikan ulasan.
+            </div>
           </div>
         </section>
       </div>
@@ -303,7 +320,7 @@
     </div>
 
     <div class="modal fade" id="adminModal" tabindex="-1">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
         <div class="modal-content border-0 rounded-5 shadow-lg">
           <div class="modal-header border-0 px-4 pt-4">
             <h5 class="fw-bold">Panel Manajemen Kantin</h5>
@@ -314,48 +331,69 @@
             ></button>
           </div>
           <div class="modal-body px-4 pb-5">
-            <div class="card bg-light border-0 rounded-4 p-3 mb-4">
-              <h6 class="fw-bold mb-3">
-                <i class="bi bi-plus-circle me-2"></i>Tambah Menu Baru
-              </h6>
-              <div class="row g-2">
-                <div class="col-6">
-                  <input
-                    type="text"
-                    id="newMenuName"
-                    class="form-control"
-                    placeholder="Nama Makanan"
-                  />
-                </div>
-                <div class="col-6">
-                  <input
-                    type="number"
-                    id="newMenuPrice"
-                    class="form-control"
-                    placeholder="Harga (Rp)"
-                  />
-                </div>
-                <div class="col-12">
-                  <input
-                    type="text"
-                    id="newMenuImg"
-                    class="form-control"
-                    placeholder="URL Foto"
-                  />
-                </div>
-                <div class="col-12 mt-2">
-                  <button
-                    class="btn btn-warning w-100 fw-bold"
-                    onclick="addNewMenu()"
-                  >
-                    TAMBAHKAN KE MENU
-                  </button>
+            <ul class="nav nav-pills mb-3" id="admin-pills-tab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active rounded-pill fw-bold" id="admin-orders-tab" data-bs-toggle="pill" data-bs-target="#admin-orders" type="button" role="tab">Pesanan Masuk</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link rounded-pill fw-bold" id="admin-menus-tab" data-bs-toggle="pill" data-bs-target="#admin-menus" type="button" role="tab" onclick="fetchAdminMenus()">Kelola Menu</button>
+              </li>
+            </ul>
+            <div class="tab-content" id="admin-pills-tabContent">
+              <div class="tab-pane fade show active" id="admin-orders" role="tabpanel">
+                <div id="admin-orders-list" class="small text-muted mt-3">
+                  Belum ada pesanan.
                 </div>
               </div>
-            </div>
-            <h6 class="fw-bold mb-3">Pesanan Masuk</h6>
-            <div id="admin-orders-list" class="small text-muted">
-              Belum ada pesanan.
+              <div class="tab-pane fade" id="admin-menus" role="tabpanel">
+                <div class="card bg-light border-0 rounded-4 p-3 mb-4 mt-3">
+                  <h6 class="fw-bold mb-3">
+                    <i class="bi bi-plus-circle me-2"></i>Tambah Menu Baru
+                  </h6>
+                  <div class="row g-2">
+                    <div class="col-12">
+                      <select id="newMenuKantin" class="form-select">
+                        <option value="">Pilih Kantin</option>
+                      </select>
+                    </div>
+                    <div class="col-6">
+                      <input
+                        type="text"
+                        id="newMenuName"
+                        class="form-control"
+                        placeholder="Nama Makanan"
+                      />
+                    </div>
+                    <div class="col-6">
+                      <input
+                        type="number"
+                        id="newMenuPrice"
+                        class="form-control"
+                        placeholder="Harga (Rp)"
+                      />
+                    </div>
+                    <div class="col-12">
+                      <input
+                        type="text"
+                        id="newMenuImg"
+                        class="form-control"
+                        placeholder="URL Foto"
+                      />
+                    </div>
+                    <div class="col-12 mt-2">
+                      <button
+                        class="btn btn-warning w-100 fw-bold"
+                        onclick="addNewMenu()"
+                      >
+                        TAMBAHKAN KE MENU
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <h6 class="fw-bold mb-3">Daftar Menu Tersedia</h6>
+                <div id="admin-menu-list" class="table-responsive">
+                </div>
+              </div>
             </div>
           </div>
         </div>
