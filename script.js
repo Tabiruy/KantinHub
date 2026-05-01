@@ -247,6 +247,7 @@ async function confirmPayment() {
     .join(", ");
 
   const payload = {
+    kantin_id: cart[0].kantin_id,
     username: activeUser,
     items: itemsString,
     total_price: totalHarga,
@@ -406,7 +407,7 @@ async function fetchAdminOrders() {
   const container = document.getElementById("admin-orders-list");
   container.innerHTML = "Memuat...";
   
-  const { data, error } = await _supabase.from("orders").select("*").order("created_at", { ascending: false });
+  const { data, error } = await _supabase.from("orders").select("*, kantin(nama)").order("created_at", { ascending: false });
   
   if (error) {
     container.innerHTML = "Gagal memuat pesanan.";
@@ -416,7 +417,7 @@ async function fetchAdminOrders() {
   container.innerHTML = data.length ? data.map(o => `
     <div class="card border-0 bg-white shadow-sm mb-2 p-3 rounded-4">
       <div class="d-flex justify-content-between">
-        <b>${o.username}</b>
+        <b>${o.username} <span class="badge bg-warning text-dark ms-2">${o.kantin ? o.kantin.nama : 'Kantin ID ' + o.kantin_id}</span></b>
         <span class="small">${new Date(o.created_at).toLocaleString()}</span>
       </div>
       <div>${o.items}</div>
