@@ -229,3 +229,37 @@ async function fetchHistory() {
         .join("")
     : "Belum ada pesanan.";
 }
+
+async function confirmPayment() {
+  if (cart.length === 0) return;
+
+  const totalHarga = cart.reduce((sum, i) => sum + i.harga, 0);
+  const itemsString = cart.map((i) => i.nama).join(", ");
+
+  const payload = {
+    username: activeUser,
+    items: itemsString,
+    total_price: totalHarga,
+    note: document.getElementById("orderNote").value,
+  };
+
+  console.log("Mencoba mengirim data:", payload); // Cek di console
+
+  try {
+    const { data, error } = await _supabase.from("orders").insert([payload]);
+
+    if (error) {
+      // Jika Supabase menolak, pesan ini akan muncul
+      console.error("Detail Error Supabase:", error);
+      alert("Gagal: " + error.message);
+    } else {
+      console.log("Berhasil Terkirim!", data);
+      alert("Pesanan Berhasil!");
+      cart = [];
+      updateCartUI();
+      showSection("home");
+    }
+  } catch (err) {
+    console.error("Koneksi Terputus:", err);
+  }
+}
