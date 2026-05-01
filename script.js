@@ -343,6 +343,15 @@ function renderCheckout() {
   const list = document.getElementById("cart-summary-list");
   let total = 0;
   
+  if (cart.length === 0) {
+    list.innerHTML = "<p class='text-muted text-center mb-0'>Keranjang kosong.</p>";
+    document.getElementById("final-price-display").innerText = "Rp 0";
+    document.querySelector("#checkout-section button.btn-warning").disabled = true;
+    return;
+  }
+  
+  document.querySelector("#checkout-section button.btn-warning").disabled = false;
+  
   const groupedCart = {};
   cart.forEach(item => {
     if (!groupedCart[item.id]) {
@@ -354,15 +363,55 @@ function renderCheckout() {
 
   list.innerHTML = Object.values(groupedCart)
     .map((item) => {
-      return `<div class="d-flex justify-content-between mb-2">
-        <span>${item.qty}x ${item.nama}</span>
-        <b>Rp ${(item.harga * item.qty).toLocaleString()}</b>
+      return `<div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex align-items-center gap-2">
+          <button class="btn btn-outline-danger btn-sm" onclick="decreaseQty(${item.id})">-</button>
+          <input type="number" class="form-control form-control-sm text-center fw-bold p-1" style="width: 45px;" value="${item.qty}" min="0" onchange="setQty(${item.id}, this.value)">
+          <button class="btn btn-outline-success btn-sm" onclick="increaseQty(${item.id})">+</button>
+        </div>
+        <div class="ms-3 flex-grow-1 text-truncate small fw-bold">${item.nama}</div>
+        <div class="fw-bold">Rp ${(item.harga * item.qty).toLocaleString()}</div>
       </div>`;
     })
     .join("");
     
   document.getElementById("final-price-display").innerText =
     `Rp ${total.toLocaleString()}`;
+}
+
+function increaseQty(id) {
+  const item = cart.find(m => m.id === id) || dataMenu.find(m => m.id === id);
+  if (item) {
+    cart.push({...item});
+    updateCartUI();
+    renderCheckout();
+  }
+}
+
+function decreaseQty(id) {
+  const index = cart.findIndex(m => m.id === id);
+  if (index !== -1) {
+    cart.splice(index, 1);
+    updateCartUI();
+    renderCheckout();
+  }
+}
+
+function setQty(id, newQty) {
+  const qty = parseInt(newQty);
+  if (isNaN(qty) || qty < 0) return;
+  
+  const item = cart.find(m => m.id === id) || dataMenu.find(m => m.id === id);
+  cart = cart.filter(m => m.id !== id);
+  
+  if (item && qty > 0) {
+    for (let i = 0; i < qty; i++) {
+      cart.push({...item});
+    }
+  }
+  
+  updateCartUI();
+  renderCheckout();
 }
 
 // Ambil Riwayat dari Supabase
