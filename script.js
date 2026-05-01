@@ -140,7 +140,7 @@ function renderKantin() {
     .map(
       (k) => `
     <div class="col-6 col-md-4">
-      <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-3 m-card d-flex flex-column justify-content-center align-items-center" onclick="openKantin(${k.id}, '${k.nama}')" style="cursor: pointer; aspect-ratio: 1 / 1;">
+      <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-3 m-card" onclick="openKantin(${k.id}, '${k.nama}')" style="cursor: pointer;">
         <div class="fs-1 mb-2">${k.icon}</div>
         <h6 class="fw-bold mb-0">${k.nama}</h6>
       </div>
@@ -165,12 +165,12 @@ function renderMenu() {
         .map(
           (m) => `
     <div class="col-6 col-md-4">
-      <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
-        <img src="${m.img}" class="card-img-top" style="height: 120px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/150'">
-        <div class="card-body p-3 d-flex flex-column">
-          <h6 class="fw-bold mb-1 small">${m.nama}</h6>
+      <div class="card border-0 shadow-sm rounded-4 overflow-hidden d-flex flex-column" style="aspect-ratio: 1 / 1;">
+        <img src="${m.img}" class="card-img-top flex-grow-1" style="height: 0; object-fit: cover;" onerror="this.src='https://via.placeholder.com/150'">
+        <div class="card-body p-2 p-md-3 d-flex flex-column justify-content-end" style="flex: none;">
+          <h6 class="fw-bold mb-1 small text-truncate">${m.nama}</h6>
           <p class="text-warning fw-bold mb-2 small">Rp ${m.harga.toLocaleString()}</p>
-          <button class="btn btn-warning btn-sm w-100 rounded-pill fw-bold mt-auto" onclick="addToCart(${m.id})">+ Tambah</button>
+          <button class="btn btn-warning btn-sm w-100 rounded-pill fw-bold" onclick="addToCart(${m.id})">+ Tambah</button>
         </div>
       </div>
     </div>
