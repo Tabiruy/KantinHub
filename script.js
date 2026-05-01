@@ -1,5 +1,4 @@
 let cart = [];
-let username = "Tamu";
 let activeUser = null;
 let isAdmin = false;
 let transactionHistory = [];
@@ -469,10 +468,13 @@ function submitHistoryReview(index) {
 }
 
 // Masukkan ke daftar ulasan utama di home
-const {
-  data: { user },
-} = await supabaseClient.auth.getUser();
-const username = user ? user.email : "Tamu";
+const html = `
+    <div class="review-item">
+        <div class="d-flex justify-content-between small">
+            <span class="fw-bold">${username}</span>
+        </div>
+        <p class="small text-muted mb-0">${reviewText}</p>
+    </div>`;
 
 document.getElementById("reviews-list").insertAdjacentHTML("afterbegin", html);
 
@@ -543,33 +545,5 @@ async function confirmPayment() {
     cart = [];
     bootstrap.Modal.getInstance(document.getElementById("successModal")).show();
     showSection("home");
-  }
-}
-
-async function handleLogin(e) {
-  if (e) e.preventDefault(); // Mencegah halaman refresh jika dipanggil dari form submit
-
-  const email = document.getElementById("loginUser").value;
-  const password = document.getElementById("loginPass").value;
-
-  // Menggunakan supabaseClient yang sudah kita buat sebelumnya
-  const { data, error } = await supabaseClient.auth.signInWithPassword({
-    email: email,
-    password: password,
-  });
-
-  if (error) {
-    alert("Login Gagal: " + error.message);
-  } else {
-    username = data.user.email; // Mengisi variabel username agar tidak undefined lagi
-    alert("Selamat datang, " + username);
-
-    // Sembunyikan modal login (menggunakan bootstrap)
-    const loginModal = bootstrap.Modal.getInstance(
-      document.getElementById("loginModal"),
-    );
-    if (loginModal) loginModal.hide();
-
-    renderKantin(); // Refresh data kantin setelah login
   }
 }

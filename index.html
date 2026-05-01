@@ -271,7 +271,7 @@
             <form id="loginForm">
               <div class="mb-3">
                 <input
-                  type="email"
+                  type="text"
                   id="loginUser"
                   class="form-control p-3 rounded-3 border-light bg-light"
                   placeholder="masukan nama"
@@ -289,9 +289,13 @@
                 />
               </div>
 
-              <form id="loginForm" onsubmit="handleLogin(event)">
-                <button type="submit" class="btn btn-primary">Masuk</button>
-              </form>
+              <button
+                type="submit"
+                id="loginBtn"
+                class="btn btn-warning w-100 py-3 fw-bold rounded-3"
+              >
+                MASUK
+              </button>
             </form>
           </div>
         </div>
