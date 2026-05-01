@@ -547,3 +547,24 @@ async function confirmPayment() {
     showSection("home");
   }
 }
+
+const getReviews = async () => {
+  const { data, error } = await supabase
+    .from("reviews")
+    .select(
+      `
+      comment,
+      rating,
+      created_at,
+      kantins ( nama )
+    `,
+    )
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Gagal mengambil ulasan:", error);
+  } else {
+    console.log("Daftar Komentar:", data);
+    // Di sini Anda bisa menggunakan loop untuk menampilkan data ke HTML
+  }
+};
