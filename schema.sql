@@ -31,6 +31,7 @@ CREATE TABLE orders (
   items TEXT NOT NULL,
   total_price INT NOT NULL,
   note TEXT,
+  is_completed BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 

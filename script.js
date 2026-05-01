@@ -140,7 +140,7 @@ function renderKantin() {
     .map(
       (k) => `
     <div class="col-6 col-md-4">
-      <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-3 m-card" onclick="openKantin(${k.id}, '${k.nama}')" style="cursor: pointer;">
+      <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-3 m-card d-flex flex-column justify-content-center align-items-center" onclick="openKantin(${k.id}, '${k.nama}')" style="cursor: pointer; aspect-ratio: 1 / 1;">
         <div class="fs-1 mb-2">${k.icon}</div>
         <h6 class="fw-bold mb-0">${k.nama}</h6>
       </div>
@@ -390,7 +390,7 @@ async function fetchHistory() {
     <div class="card border-0 shadow-sm p-3 mb-3 rounded-4">
       <div class="d-flex justify-content-between align-items-center mb-2">
         <div class="small fw-bold text-muted">${new Date(h.created_at).toLocaleString()}</div>
-        <span class="badge bg-success">Berhasil</span>
+        <span class="badge ${h.is_completed ? 'bg-success' : 'bg-warning text-dark'}">${h.is_completed ? 'Selesai' : 'Diproses'}</span>
       </div>
       <div class="mb-2 text-dark">${h.items}</div>
       ${h.note ? `<div class="small text-muted mb-2"><i class="bi bi-chat-text me-1"></i>Catatan: ${h.note}</div>` : ''}
@@ -415,16 +415,27 @@ async function fetchAdminOrders() {
   }
   
   container.innerHTML = data.length ? data.map(o => `
-    <div class="card border-0 bg-white shadow-sm mb-2 p-3 rounded-4">
+    <div class="card bg-white shadow-sm mb-3 p-3 rounded-4 border ${o.is_completed ? 'border-success border-2' : 'border-danger border-2'}">
       <div class="d-flex justify-content-between">
         <b>${o.username} <span class="badge bg-warning text-dark ms-2">${o.kantin ? o.kantin.nama : 'Kantin ID ' + o.kantin_id}</span></b>
         <span class="small">${new Date(o.created_at).toLocaleString()}</span>
       </div>
-      <div>${o.items}</div>
-      ${o.note ? `<div class="small text-muted">Catatan: ${o.note}</div>` : ''}
-      <div class="text-warning fw-bold mt-1">Rp ${o.total_price.toLocaleString()}</div>
+      <div class="my-2">${o.items}</div>
+      ${o.note ? `<div class="small text-muted mb-2">Catatan: ${o.note}</div>` : ''}
+      <div class="d-flex justify-content-between align-items-center mt-2 border-top pt-2">
+        <div class="text-warning fw-bold">Rp ${o.total_price.toLocaleString()}</div>
+        ${!o.is_completed ? `<button class="btn btn-sm btn-success fw-bold" onclick="completeOrder(${o.id})"><i class="bi bi-check-circle me-1"></i>Selesai</button>` : `<span class="badge bg-success"><i class="bi bi-check-all me-1"></i>Telah Selesai</span>`}
+      </div>
     </div>
   `).join("") : "Belum ada pesanan.";
+}
+
+async function completeOrder(id) {
+  const btn = event.currentTarget;
+  btn.innerText = "Tunggu...";
+  btn.disabled = true;
+  await _supabase.from("orders").update({ is_completed: true }).eq("id", id);
+  fetchAdminOrders();
 }
 
 async function fetchAdminMenus() {
