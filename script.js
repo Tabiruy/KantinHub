@@ -6,7 +6,8 @@ let activeKantinId = null;
 
 // Konfigurasi Supabase (Tetap simpan jika Anda akan menggunakannya nanti)
 const SUPABASE_URL = "https://ciiqedrfocqzhhhsbtbb.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+const SUPABASE_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNpaXFlZHJmb2NxemhoaHNidGJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1MTA4MzYsImV4cCI6MjA5MzA4NjgzNn0.jaPVyYSA7XXEISY41ieIKXQkRwZBcWndBJiqfZnzKqU";
 
 // Data Kantin
 const dataKantin = [
