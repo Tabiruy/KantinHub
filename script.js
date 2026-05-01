@@ -1,15 +1,17 @@
+// 1. KONFIGURASI SUPABASE
+const SUPABASE_URL = "https://ciiqedrfocqzhhhsbtbb.supabase.co";
+const SUPABASE_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNpaXFlZHJmb2NxemhoaHNidGJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1MTA4MzYsImV4cCI6MjA5MzA4NjgzNn0.jaPVyYSA7XXEISY41ieIKXQkRwZBcWndBJiqfZnzKqU"; // Pastikan Key Lengkap
+const { createClient } = supabase;
+const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// 2. STATE APLIKASI
 let cart = [];
 let activeUser = null;
 let isAdmin = false;
-let transactionHistory = [];
 let activeKantinId = null;
 
-// Konfigurasi Supabase (Tetap simpan jika Anda akan menggunakannya nanti)
-const SUPABASE_URL = "https://ciiqedrfocqzhhhsbtbb.supabase.co";
-const SUPABASE_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNpaXFlZHJmb2NxemhoaHNidGJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1MTA4MzYsImV4cCI6MjA5MzA4NjgzNn0.jaPVyYSA7XXEISY41ieIKXQkRwZBcWndBJiqfZnzKqU";
-
-// Data Kantin
+// Data Kantin Tetap (Statik)
 const dataKantin = [
   { id: 1, nama: "USMAN 1", icon: "🍱" },
   { id: 2, nama: "USMAN 2", icon: "🍲" },
@@ -19,7 +21,7 @@ const dataKantin = [
   { id: 6, nama: "USMAN 8", icon: "🍙" },
 ];
 
-// Data Menu Awal
+// Data Menu (Bisa dikembangkan untuk ambil dari Supabase juga)
 let dataMenu = [
   { id: 101, kId: 1, nama: "Bakpao", harga: 2500, img: "Gambar/bakpao.jpg" },
   { id: 102, kId: 1, nama: "Pentol", harga: 5000, img: "Gambar/pentol.jpg" },
@@ -30,29 +32,15 @@ let dataMenu = [
     harga: 1000,
     img: "Gambar/gorengan.jpg",
   },
-  {
-    id: 301,
-    kId: 3,
-    nama: "Tempura",
-    harga: 1000,
-    img: "https://via.placeholder.com/150",
-  },
-  {
-    id: 401,
-    kId: 4,
-    nama: "Es Sachet",
-    harga: 3000,
-    img: "https://via.placeholder.com/150",
-  },
 ];
 
-// Inisialisasi saat halaman dimuat
+// 3. INISIALISASI
 document.addEventListener("DOMContentLoaded", () => {
   renderKantin();
   setupLoginForm();
 });
 
-// Render Daftar Kantin di Home
+// 4. FUNGSI RENDER UI
 function renderKantin() {
   const container = document.getElementById("kantin-container");
   container.innerHTML = dataKantin
@@ -69,7 +57,6 @@ function renderKantin() {
     .join("");
 }
 
-// Buka Kantin & Tampilkan Menu
 function openKantin(id, nama) {
   activeKantinId = id;
   document.getElementById("kantin-name-title").innerText = nama;
@@ -81,33 +68,27 @@ function renderMenu(kantinId) {
   const container = document.getElementById("menu-container");
   const menus = dataMenu.filter((m) => m.kId === kantinId);
 
-  if (menus.length === 0) {
-    container.innerHTML =
-      '<p class="text-center text-muted">Menu belum tersedia di kantin ini.</p>';
-    return;
-  }
-
-  container.innerHTML = menus
-    .map(
-      (m) => `
+  container.innerHTML = menus.length
+    ? menus
+        .map(
+          (m) => `
     <div class="col-6 col-md-4">
       <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
         <img src="${m.img}" class="card-img-top" style="height: 120px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/150'">
         <div class="card-body p-3">
           <h6 class="fw-bold mb-1 small">${m.nama}</h6>
           <p class="text-warning fw-bold mb-2 small">Rp ${m.harga.toLocaleString()}</p>
-          <button class="btn btn-warning btn-sm w-100 rounded-pill fw-bold" onclick="addToCart(${m.id})">
-            + Tambah
-          </button>
+          <button class="btn btn-warning btn-sm w-100 rounded-pill fw-bold" onclick="addToCart(${m.id})">+ Tambah</button>
         </div>
       </div>
     </div>
   `,
-    )
-    .join("");
+        )
+        .join("")
+    : '<p class="text-center w-100">Menu belum tersedia.</p>';
 }
 
-// Logika Keranjang
+// 5. LOGIKA KERANJANG & CHECKOUT
 function addToCart(menuId) {
   if (!activeUser) {
     new bootstrap.Modal(document.getElementById("loginModal")).show();
@@ -115,15 +96,15 @@ function addToCart(menuId) {
   }
   const item = dataMenu.find((m) => m.id === menuId);
   cart.push(item);
-  updateCartBadge();
+  updateCartUI();
 }
 
-function updateCartBadge() {
+function updateCartUI() {
   const badge = document.getElementById("floating-cart");
   if (cart.length > 0) {
     badge.classList.remove("d-none");
     document.getElementById("cart-badge-count").innerText = cart.length;
-    const total = cart.reduce((sum, item) => sum + item.harga, 0);
+    const total = cart.reduce((sum, i) => sum + i.harga, 0);
     document.getElementById("cart-badge-total").innerText =
       `Rp ${total.toLocaleString()}`;
   } else {
@@ -131,7 +112,66 @@ function updateCartBadge() {
   }
 }
 
-// Navigasi Seksi
+// 6. INTEGRASI SUPABASE (PENGIRIMAN DATA)
+async function confirmPayment() {
+  if (cart.length === 0) return;
+
+  const btnText = document.querySelector("#confirmBtnText");
+  const btnSpinner = document.querySelector("#confirmSpinner");
+
+  // Loading state
+  btnText.innerText = "Memproses...";
+  btnSpinner.classList.remove("d-none");
+
+  const totalHarga = cart.reduce((sum, i) => sum + i.harga, 0);
+  const itemsString = cart.map((i) => i.nama).join(", ");
+
+  const payload = {
+    username: activeUser,
+    items: itemsString,
+    total_price: totalHarga,
+    note: document.getElementById("orderNote").value,
+    created_at: new Date().toISOString(),
+  };
+
+  try {
+    // Pastikan nama tabel di Supabase adalah 'orders'
+    const { data, error } = await _supabase.from("orders").insert([payload]);
+
+    if (error) throw error;
+
+    // Sukses
+    cart = [];
+    updateCartUI();
+    new bootstrap.Modal(document.getElementById("successModal")).show();
+    showSection("home");
+  } catch (err) {
+    console.error("Supabase Error:", err.message);
+    alert(
+      "Gagal mengirim pesanan: " +
+        err.message +
+        "\nPastikan RLS di Supabase sudah dimatikan/diatur.",
+    );
+  } finally {
+    btnText.innerText = "Konfirmasi Pembayaran";
+    btnSpinner.classList.add("d-none");
+  }
+}
+
+// 7. SISTEM AUTH & NAVIGASI
+function setupLoginForm() {
+  document.getElementById("loginForm").onsubmit = (e) => {
+    e.preventDefault();
+    activeUser = document.getElementById("loginUser").value;
+
+    document.getElementById("loginBtn").classList.add("d-none");
+    document.getElementById("userProfile").classList.remove("d-none");
+    document.getElementById("userDisplayName").innerText = activeUser;
+
+    bootstrap.Modal.getInstance(document.getElementById("loginModal")).hide();
+  };
+}
+
 function showSection(sectionId) {
   const sections = [
     "home-section",
@@ -143,141 +183,49 @@ function showSection(sectionId) {
   document.getElementById(`${sectionId}-section`).classList.remove("d-none");
 
   if (sectionId === "checkout") renderCheckout();
-  if (sectionId === "history") renderHistory();
+  if (sectionId === "history") fetchHistory();
 }
 
-// Checkout & Pembayaran
 function renderCheckout() {
   const list = document.getElementById("cart-summary-list");
-  const totalDisplay = document.getElementById("final-price-display");
   let total = 0;
-
   list.innerHTML = cart
     .map((item) => {
       total += item.harga;
-      return `<div class="d-flex justify-content-between mb-2">
-              <span>${item.nama}</span>
-              <span class="fw-bold">Rp ${item.harga.toLocaleString()}</span>
-            </div>`;
+      return `<div class="d-flex justify-content-between"><span>${item.nama}</span><b>Rp ${item.harga.toLocaleString()}</b></div>`;
     })
     .join("");
-
-  totalDisplay.innerText = `Rp ${total.toLocaleString()}`;
+  document.getElementById("final-price-display").innerText =
+    `Rp ${total.toLocaleString()}`;
 }
 
-function toggleQR() {
-  const isQRIS = document.getElementById("methodQRIS").checked;
-  document.getElementById("qr-area").classList.toggle("d-none", !isQRIS);
-}
-
-function confirmPayment() {
-  if (cart.length === 0) return;
-
-  const order = {
-    user: activeUser,
-    items: [...cart],
-    total: cart.reduce((sum, i) => sum + i.harga, 0),
-    date: new Date().toLocaleString(),
-    note: document.getElementById("orderNote").value,
-  };
-
-  transactionHistory.push(order);
-  cart = [];
-  updateCartBadge();
-  new bootstrap.Modal(document.getElementById("successModal")).show();
-  showSection("home");
-}
-
-// Auth System
-function setupLoginForm() {
-  document.getElementById("loginForm").onsubmit = (e) => {
-    e.preventDefault();
-    const user = document.getElementById("loginUser").value;
-    const pass = document.getElementById("loginPass").value;
-
-    activeUser = user;
-
-    // Simple Admin Logic
-    if (user === "admin123" && pass === "admin123") {
-      isAdmin = true;
-      document.getElementById("navbar-logo").onclick = () =>
-        new bootstrap.Modal(document.getElementById("adminModal")).show();
-      alert("Mode Admin Aktif! Klik logo untuk panel.");
-    }
-
-    document.getElementById("loginBtn").classList.add("d-none");
-    document.getElementById("userProfile").classList.remove("d-none");
-    document.getElementById("userDisplayName").innerText = user;
-
-    bootstrap.Modal.getInstance(document.getElementById("loginModal")).hide();
-  };
-}
-
-function doLogout() {
-  activeUser = null;
-  isAdmin = false;
-  cart = [];
-  updateCartBadge();
-  location.reload();
-}
-
-// Admin Function
-function addNewMenu() {
-  if (!isAdmin) return;
-  const name = document.getElementById("newMenuName").value;
-  const price = parseInt(document.getElementById("newMenuPrice").value);
-  const img = document.getElementById("newMenuImg").value;
-
-  if (name && price && activeKantinId) {
-    const newId = Date.now();
-    dataMenu.push({
-      id: newId,
-      kId: activeKantinId,
-      nama: name,
-      harga: price,
-      img: img,
-    });
-    renderMenu(activeKantinId);
-    alert("Menu berhasil ditambahkan!");
-  }
-}
-
-// Review System
-function addReview() {
-  const name = document.getElementById("reviewerName").value;
-  const text = document.getElementById("reviewText").value;
-  if (!name || !text) return;
-
-  const list = document.getElementById("reviews-list");
-  const newReview = document.createElement("div");
-  newReview.className = "review-item mb-2";
-  newReview.innerHTML = `<div class="d-flex justify-content-between small"><span class="fw-bold">${name}</span></div><p class="small text-muted mb-0">${text}</p>`;
-  list.prepend(newReview);
-
-  document.getElementById("reviewerName").value = "";
-  document.getElementById("reviewText").value = "";
-}
-
-function renderHistory() {
+// Ambil Riwayat dari Supabase
+async function fetchHistory() {
   const container = document.getElementById("history-list");
-  if (transactionHistory.length === 0) {
-    container.innerHTML =
-      "<p class='text-muted'>Belum ada riwayat pesanan.</p>";
+  container.innerHTML = "Memuat riwayat...";
+
+  const { data, error } = await _supabase
+    .from("orders")
+    .select("*")
+    .eq("username", activeUser)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    container.innerHTML = "Gagal memuat data.";
     return;
   }
-  container.innerHTML = transactionHistory
-    .map(
-      (h) => `
-    <div class="card border-0 shadow-sm rounded-4 p-3 mb-2">
-      <div class="d-flex justify-content-between">
-        <span class="small fw-bold">${h.date}</span>
-        <span class="badge bg-success">Selesai</span>
-      </div>
-      <hr class="my-2">
-      <div class="small">${h.items.map((i) => i.nama).join(", ")}</div>
-      <div class="fw-bold text-warning">Total: Rp ${h.total.toLocaleString()}</div>
+
+  container.innerHTML = data.length
+    ? data
+        .map(
+          (h) => `
+    <div class="card border-0 shadow-sm p-3 mb-2 rounded-4">
+      <div class="small fw-bold">${new Date(h.created_at).toLocaleDateString()}</div>
+      <div class="small text-muted">${h.items}</div>
+      <div class="fw-bold text-warning">Rp ${h.total_price.toLocaleString()}</div>
     </div>
   `,
-    )
-    .join("");
+        )
+        .join("")
+    : "Belum ada pesanan.";
 }
