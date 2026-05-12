@@ -17,7 +17,7 @@ body {
   border-radius: 20px;
 }
 .carousel-item {
-  height: 580px;
+  height: 1080px;
 }
 .carousel-item img {
   object-fit: cover;
