@@ -107,9 +107,18 @@ body.is-checkout #floating-cart {
 
 .developer-card {
   background: white;
-  border-radius: 20px;
+  border-radius: 12px;
   border: 1px solid rgba(0, 0, 0, 0.05);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.04);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+  cursor: pointer;
+}
+
+.developer-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.08);
 }
 
 .developer-photo {
