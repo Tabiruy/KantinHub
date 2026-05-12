@@ -33,8 +33,7 @@
         <div id="auth-area" class="d-flex align-items-center">
           <button
             class="btn btn-outline-secondary btn-sm fw-bold rounded-pill me-2"
-            data-bs-toggle="modal"
-            data-bs-target="#developerModal"
+            onclick="showSection('developer')"
           >
             Info Pengembang
           </button>
@@ -190,6 +189,114 @@
         </section>
       </div>
 
+      <div id="developer-section" class="mt-4 d-none">
+        <div class="d-flex align-items-center gap-3 mb-4">
+          <button
+            class="btn btn-white shadow-sm rounded-circle"
+            onclick="showSection('home')"
+          >
+            <i class="bi bi-arrow-left"></i>
+          </button>
+          <h4 class="fw-bold mb-0">Info Pengembang</h4>
+        </div>
+        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+          <div class="row g-4 align-items-center">
+            <div class="col-lg-7">
+              <h5 class="fw-bold">Tentang KantinHub</h5>
+              <p class="text-muted">
+                KantinHub hadir sebagai solusi pemesanan makanan kantin yang
+                cepat, sederhana, dan mudah digunakan. Aplikasi ini menampilkan
+                daftar kantin, katalog menu, serta fitur ulasan dan pembayaran
+                langsung di web.
+              </p>
+              <p class="small text-muted mb-0">
+                Dibangun untuk membantu siswa dan pengunjung kantin menemukan
+                pilihan makanan tanpa antre dan dengan pengalaman responsif di
+                desktop maupun mobile.
+              </p>
+            </div>
+            <div class="col-lg-5">
+              <div class="row g-3">
+                <div class="col-4">
+                  <div class="developer-card p-3 text-center h-100">
+                    <img
+                      src="https://via.placeholder.com/120"
+                      alt="Tama"
+                      class="developer-photo mb-3"
+                    />
+                    <p class="fw-bold mb-1">Tama</p>
+                    <p class="small text-muted mb-0">UI/UX & Frontend</p>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="developer-card p-3 text-center h-100">
+                    <img
+                      src="https://via.placeholder.com/120"
+                      alt="Rafid"
+                      class="developer-photo mb-3"
+                    />
+                    <p class="fw-bold mb-1">Rafid</p>
+                    <p class="small text-muted mb-0">
+                      Fungsionalitas & Integrasi
+                    </p>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="developer-card p-3 text-center h-100">
+                    <img
+                      src="https://via.placeholder.com/120"
+                      alt="Yudha"
+                      class="developer-photo mb-3"
+                    />
+                    <p class="fw-bold mb-1">Yudha</p>
+                    <p class="small text-muted mb-0">Konten & Pengujian</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card border-0 shadow-sm rounded-4 p-4">
+          <h5 class="fw-bold mb-3">Fitur Unggulan</h5>
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <div class="feature-card p-3 h-100">
+                <h6 class="fw-bold">Daftar Kantin Dinamis</h6>
+                <p class="small text-muted mb-0">
+                  Temukan kantin dengan cepat menggunakan tampilan kartu yang
+                  responsif.
+                </p>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="feature-card p-3 h-100">
+                <h6 class="fw-bold">Katalog Menu Lengkap</h6>
+                <p class="small text-muted mb-0">
+                  Lihat menu, harga, dan foto agar pemilihan makanan lebih
+                  mudah.
+                </p>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="feature-card p-3 h-100">
+                <h6 class="fw-bold">Review & Rekomendasi</h6>
+                <p class="small text-muted mb-0">
+                  Feedback pengguna membantu memilih kantin terbaik.
+                </p>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="feature-card p-3 h-100">
+                <h6 class="fw-bold">Desain Mobile Friendly</h6>
+                <p class="small text-muted mb-0">
+                  Tampilan mengalir baik di layar kecil maupun besar.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div id="katalog-section" class="mt-4 d-none">
         <div class="d-flex align-items-center gap-3 mb-4">
           <button
@@ -298,118 +405,6 @@
         <div class="fw-bold" id="cart-badge-total">Rp 0</div>
       </div>
       <div class="fw-bold">Bayar <i class="bi bi-chevron-right"></i></div>
-    </div>
-
-    <!-- Developer Info Modal -->
-    <div class="modal fade" id="developerModal" tabindex="-1">
-      <div
-        class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable"
-      >
-        <div class="modal-content border-0 rounded-5 shadow-lg">
-          <div class="modal-header border-0 px-4 pt-4">
-            <h5 class="fw-bold">Info Pengembang</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-            ></button>
-          </div>
-          <div class="modal-body px-4 pb-5">
-            <div class="mb-4 text-center">
-              <p class="mb-2">
-                KantinHub adalah aplikasi web untuk memudahkan pemesanan makanan
-                kantin, menampilkan daftar kantin, katalog menu, dan pengalaman
-                pengguna yang cepat dan intuitif.
-              </p>
-              <p class="text-muted small mb-0">
-                Dibangun oleh tim developer yang fokus pada antarmuka bersih,
-                responsif, dan fungsionalitas belanja yang ringan.
-              </p>
-            </div>
-            <div class="row g-3 mb-4">
-              <div class="col-12 col-md-4">
-                <div class="developer-card p-3 text-center h-100">
-                  <img
-                    src="https://via.placeholder.com/150"
-                    alt="Tama"
-                    class="developer-photo mb-3"
-                  />
-                  <h6 class="fw-bold mb-1">Tama</h6>
-                  <p class="small text-muted mb-0">UI/UX & Frontend</p>
-                </div>
-              </div>
-              <div class="col-12 col-md-4">
-                <div class="developer-card p-3 text-center h-100">
-                  <img
-                    src="https://via.placeholder.com/150"
-                    alt="Rafid"
-                    class="developer-photo mb-3"
-                  />
-                  <h6 class="fw-bold mb-1">Rafid</h6>
-                  <p class="small text-muted mb-0">
-                    Fungsionalitas & Integrasi
-                  </p>
-                </div>
-              </div>
-              <div class="col-12 col-md-4">
-                <div class="developer-card p-3 text-center h-100">
-                  <img
-                    src="https://via.placeholder.com/150"
-                    alt="Yudha"
-                    class="developer-photo mb-3"
-                  />
-                  <h6 class="fw-bold mb-1">Yudha</h6>
-                  <p class="small text-muted mb-0">Konten & Pengujian</p>
-                </div>
-              </div>
-            </div>
-            <h6 class="fw-bold mb-3">Fitur Unggulan</h6>
-            <div class="list-group list-group-flush developer-features">
-              <div
-                class="list-group-item px-0 border-0 d-flex align-items-start gap-3"
-              >
-                <span class="badge bg-warning text-dark rounded-pill mt-1"
-                  >1</span
-                >
-                <div>
-                  <strong>Daftar Kantin Dinamis</strong>
-                  <div class="small text-muted">
-                    Tampilan cepat dan mudah untuk menemukan kantin yang
-                    tersedia.
-                  </div>
-                </div>
-              </div>
-              <div
-                class="list-group-item px-0 border-0 d-flex align-items-start gap-3"
-              >
-                <span class="badge bg-warning text-dark rounded-pill mt-1"
-                  >2</span
-                >
-                <div>
-                  <strong>Katalog Menu Lengkap</strong>
-                  <div class="small text-muted">
-                    Menu tampil rapi dengan harga dan gambar yang jelas.
-                  </div>
-                </div>
-              </div>
-              <div
-                class="list-group-item px-0 border-0 d-flex align-items-start gap-3"
-              >
-                <span class="badge bg-warning text-dark rounded-pill mt-1"
-                  >3</span
-                >
-                <div>
-                  <strong>Desain Responsif</strong>
-                  <div class="small text-muted">
-                    Cocok untuk desktop dan perangkat seluler dengan pengalaman
-                    yang nyaman.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- Login Modal dengan Placeholder Baru -->

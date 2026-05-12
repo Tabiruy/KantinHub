@@ -131,6 +131,13 @@ body.is-checkout #floating-cart {
   font-size: 0.85rem;
 }
 
+.feature-card {
+  background: white;
+  border-radius: 18px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.04);
+}
+
 /* Styling tombol tambah kurang */
 .btn-outline-danger,
 .btn-outline-success {

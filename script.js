@@ -348,6 +348,7 @@ function doLogout() {
 function showSection(sectionId) {
   const sections = [
     "home-section",
+    "developer-section",
     "katalog-section",
     "checkout-section",
     "history-section",
