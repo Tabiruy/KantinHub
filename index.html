@@ -55,11 +55,16 @@
                   href="#"
                   data-bs-toggle="modal"
                   data-bs-target="#adminModal"
-                  onclick="fetchAdminOrders(); fetchAdminMenus();"
+                  onclick="
+                    fetchAdminOrders();
+                    fetchAdminMenus();
+                  "
                   ><i class="bi bi-shield-lock me-2"></i>Panel Admin</a
                 >
               </li>
-              <li><hr class="dropdown-divider" id="adminDivider" class="d-none" /></li>
+              <li>
+                <hr class="dropdown-divider" id="adminDivider" class="d-none" />
+              </li>
               <li>
                 <a
                   class="dropdown-item"
@@ -89,7 +94,7 @@
           <div class="carousel-inner shadow-sm">
             <div class="carousel-item active">
               <img
-                src="Gambar/semua kantin.jpg"
+                src="https://cdn.discordapp.com/attachments/1488515345982558230/1503550139795767366/9_20260512_071052_0000.png?ex=6a03c1af&is=6a02702f&hm=8470ae5c3cfd89c84e990ba0936de786266d85d7d3378e7e0151a7bf39b5475b&"
                 w="800"
                 class="d-block w-100"
               />
@@ -158,11 +163,17 @@
                 class="form-control mb-2"
                 placeholder="Tulis ulasan..."
               ></textarea>
-              <button class="btn btn-warning btn-sm w-100" onclick="addReview()">
+              <button
+                class="btn btn-warning btn-sm w-100"
+                onclick="addReview()"
+              >
                 Kirim Ulasan
               </button>
             </div>
-            <div id="review-login-msg" class="text-center text-muted small p-3 bg-light rounded-3">
+            <div
+              id="review-login-msg"
+              class="text-center text-muted small p-3 bg-light rounded-3"
+            >
               Silakan login untuk memberikan ulasan.
             </div>
           </div>
@@ -320,7 +331,9 @@
     </div>
 
     <div class="modal fade" id="adminModal" tabindex="-1">
-      <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+      <div
+        class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable"
+      >
         <div class="modal-content border-0 rounded-5 shadow-lg">
           <div class="modal-header border-0 px-4 pt-4">
             <h5 class="fw-bold">Panel Manajemen Kantin</h5>
@@ -333,14 +346,37 @@
           <div class="modal-body px-4 pb-5">
             <ul class="nav nav-pills mb-3" id="admin-pills-tab" role="tablist">
               <li class="nav-item" role="presentation">
-                <button class="nav-link active rounded-pill fw-bold" id="admin-orders-tab" data-bs-toggle="pill" data-bs-target="#admin-orders" type="button" role="tab">Pesanan Masuk</button>
+                <button
+                  class="nav-link active rounded-pill fw-bold"
+                  id="admin-orders-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#admin-orders"
+                  type="button"
+                  role="tab"
+                >
+                  Pesanan Masuk
+                </button>
               </li>
               <li class="nav-item" role="presentation">
-                <button class="nav-link rounded-pill fw-bold" id="admin-menus-tab" data-bs-toggle="pill" data-bs-target="#admin-menus" type="button" role="tab" onclick="fetchAdminMenus()">Kelola Menu</button>
+                <button
+                  class="nav-link rounded-pill fw-bold"
+                  id="admin-menus-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#admin-menus"
+                  type="button"
+                  role="tab"
+                  onclick="fetchAdminMenus()"
+                >
+                  Kelola Menu
+                </button>
               </li>
             </ul>
             <div class="tab-content" id="admin-pills-tabContent">
-              <div class="tab-pane fade show active" id="admin-orders" role="tabpanel">
+              <div
+                class="tab-pane fade show active"
+                id="admin-orders"
+                role="tabpanel"
+              >
                 <div id="admin-orders-list" class="small text-muted mt-3">
                   Belum ada pesanan.
                 </div>
@@ -391,8 +427,7 @@
                   </div>
                 </div>
                 <h6 class="fw-bold mb-3">Daftar Menu Tersedia</h6>
-                <div id="admin-menu-list" class="table-responsive">
-                </div>
+                <div id="admin-menu-list" class="table-responsive"></div>
               </div>
             </div>
           </div>
