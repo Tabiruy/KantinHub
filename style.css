@@ -100,9 +100,10 @@ body.is-checkout #floating-cart {
 .developer-card-inner {
   position: relative;
   width: 100%;
-  min-height: 450px;
+  /* Pastikan tinggi ini konsisten untuk depan dan belakang */
+  min-height: 520px;
   transform-style: preserve-3d;
-  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+  transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
 }
 
 .developer-card-flip:hover .developer-card-inner {
@@ -115,12 +116,9 @@ body.is-checkout #floating-cart {
   backface-visibility: hidden;
   border-radius: 24px;
   background: white;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  /* KUNCI: Gunakan border transparan agar ukuran tetap sama saat hover */
+  /* Menggunakan border transparan agar ukuran tidak berubah saat hover */
   border: 2px solid transparent;
-  transition:
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -138,9 +136,8 @@ body.is-checkout #floating-cart {
 
 .developer-photo-wrapper {
   width: 100%;
-  height: 320px;
+  height: 350px;
   overflow: hidden;
-  background: #f8f9fa;
 }
 
 .developer-photo {
@@ -155,31 +152,33 @@ body.is-checkout #floating-cart {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 15px;
+  padding: 20px;
   background: white;
-  border-top: none; /* Menghilangkan garis sesuai permintaan sebelumnya */
+  border-top: none; /* Garis bawah foto tetap dihapus */
 }
 
 .developer-card-back {
   transform: rotateY(180deg);
-  align-items: center;
-  justify-content: center;
   background: #fffcf0;
-  padding: 20px;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  /* Membuat konten di dalam kartu QR tersebar merata agar memenuhi tinggi kartu */
+  justify-content: space-around;
+  align-items: center;
 }
 
 .qr-code-wrapper {
   background: white;
-  padding: 12px;
-  border-radius: 20px;
-  box-shadow: 0 8px 20px rgba(255, 193, 7, 0.2);
-  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 24px;
+  box-shadow: 0 8px 20px rgba(255, 193, 7, 0.15);
 }
 
 .qr-code {
-  width: 140px;
-  height: 140px;
-  object-fit: cover;
+  width: 180px;
+  height: 180px;
+  display: block;
 }
 
 .social-links a {
