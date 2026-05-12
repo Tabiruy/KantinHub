@@ -17,7 +17,13 @@ body {
   border-radius: 20px;
 }
 .carousel-item {
-  height: 350px;
+  aspect-ratio: 4/5;
+}
+
+@media (min-width: 768px) {
+  .carousel-item {
+    aspect-ratio: 16/9;
+  }
 }
 .carousel-item img {
   object-fit: cover;
