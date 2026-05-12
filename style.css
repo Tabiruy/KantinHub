@@ -105,6 +105,32 @@ body.is-checkout #floating-cart {
   border: none;
 }
 
+.developer-card {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.04);
+}
+
+.developer-photo {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid rgba(255, 193, 7, 0.18);
+}
+
+.developer-features .list-group-item {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.developer-features .badge {
+  min-width: 30px;
+  height: 30px;
+  font-size: 0.85rem;
+}
+
 /* Styling tombol tambah kurang */
 .btn-outline-danger,
 .btn-outline-success {
