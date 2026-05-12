@@ -121,10 +121,16 @@ body.is-checkout #floating-cart {
   box-shadow: 0 16px 30px rgba(0, 0, 0, 0.08);
 }
 
+.developer-avatars {
+  position: relative;
+  width: 100%;
+  max-width: 760px;
+}
+
 .developer-photo {
   width: 110px;
   height: 110px;
-  border-radius: 50%;
+  border-radius: 16px;
   object-fit: cover;
   border: 4px solid rgba(255, 193, 7, 0.18);
 }
