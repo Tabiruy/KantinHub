@@ -91,39 +91,18 @@ body.is-checkout #floating-cart {
   display: none !important;
 }
 
-.review-container {
-  background: white;
-  border-radius: 25px;
-  padding: 25px;
-  margin-top: 35px;
-}
-.review-item {
-  border-bottom: 1px solid #f0f0f0;
-  padding: 15px 0;
-}
-.review-item:last-child {
-  border: none;
-}
-
-.developer-avatars {
-  position: relative;
-  width: 100%;
-  max-width: 760px;
-}
-
 .developer-card-flip {
   width: 100%;
-  max-width: 360px;
-  perspective: 1200px;
-  margin: 0 auto;
+  max-width: 320px;
+  perspective: 1000px;
 }
 
 .developer-card-inner {
   position: relative;
   width: 100%;
-  min-height: 560px;
+  min-height: 380px; /* Ukuran lebih proporsional */
   transform-style: preserve-3d;
-  transition: transform 0.7s ease;
+  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
 }
 
 .developer-card-flip:hover .developer-card-inner {
@@ -136,135 +115,104 @@ body.is-checkout #floating-cart {
   backface-visibility: hidden;
   border-radius: 24px;
   background: white;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border: 2px solid transparent;
+  transition: border-color 0.3s ease;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.developer-card-flip:hover .developer-card-face {
+  border-color: var(--primary); /* Aksen kuning saat dihover */
 }
 
 .developer-card-front {
   z-index: 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.developer-card-back {
-  transform: rotateY(180deg);
-  display: flex;
-  align-items: center;
 }
 
 .developer-photo-wrapper {
   width: 100%;
-  height: 50%;
-  margin: 0;
-  border-radius: 0;
+  height: 240px;
   overflow: hidden;
-  background: #f5f4ef;
+  background: #f8f9fa;
 }
 
 .developer-photo {
   width: 100%;
   height: 100%;
-  border-radius: 0;
   object-fit: cover;
-  border: none;
 }
 
 .developer-card-info {
-  background: #faf7f0;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border-bottom-left-radius: 24px;
-  border-bottom-right-radius: 24px;
+  align-items: center;
+  padding: 15px;
+  background: white;
+  border-top: 4px solid var(--primary);
 }
 
-.developer-card-info h5 {
-  font-size: 1.25rem;
-}
-
-.developer-card-info p {
-  margin: 0;
-}
-
-.back-content {
-  width: 100%;
-}
-
-.qr-code {
-  width: 180px;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 20px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  background: #fff;
-}
-
-.social-links a {
-  width: 44px;
-  height: 44px;
-  display: inline-flex;
+.developer-card-back {
+  transform: rotateY(180deg);
   align-items: center;
   justify-content: center;
-  border-radius: 14px;
-  background: rgba(255, 193, 7, 0.12);
+  background: #fffcf0; /* Latar belakang kuning sangat pudar */
+  padding: 20px;
 }
 
-.social-links a:hover {
-  background: rgba(255, 193, 7, 0.25);
+.qr-code-wrapper {
+  background: white;
+  padding: 12px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(255, 193, 7, 0.2);
+  margin-bottom: 20px;
 }
+
 .qr-code {
   width: 140px;
   height: 140px;
   object-fit: cover;
-  border-radius: 20px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  background: #fff;
+  border-radius: 12px;
 }
 
 .social-links a {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
-  background: rgba(255, 193, 7, 0.12);
+  border-radius: 50%;
+  background: #f8f9fa;
+  color: var(--dark);
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
 }
 
 .social-links a:hover {
-  background: rgba(255, 193, 7, 0.25);
-}
-
-.developer-features .list-group-item {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.developer-features .badge {
-  min-width: 30px;
-  height: 30px;
-  font-size: 0.85rem;
+  background: var(--primary);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4);
 }
 
 .feature-card {
   background: white;
   border-radius: 18px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: transform 0.3s ease;
 }
 
-/* Styling tombol tambah kurang */
-.btn-outline-danger,
-.btn-outline-success {
-  width: 30px;
-  height: 30px;
-  padding: 0;
-  border-radius: 50% !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
+.feature-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.dev-section-title {
+  display: inline-block;
+  border-bottom: 3px solid var(--primary);
+  padding-bottom: 5px;
 }
