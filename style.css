@@ -100,7 +100,6 @@ body.is-checkout #floating-cart {
 .developer-card-inner {
   position: relative;
   width: 100%;
-  /* Dibuat lebih tinggi dari sebelumnya */
   min-height: 450px;
   transform-style: preserve-3d;
   transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
@@ -117,15 +116,20 @@ body.is-checkout #floating-cart {
   border-radius: 24px;
   background: white;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  /* KUNCI: Gunakan border transparan agar ukuran tetap sama saat hover */
   border: 2px solid transparent;
-  transition: border-color 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
+/* Saat di-hover, cukup ubah warnanya saja, bukan ketebalannya */
 .developer-card-flip:hover .developer-card-face {
   border-color: #ffc107;
+  box-shadow: 0 15px 35px rgba(255, 193, 7, 0.15);
 }
 
 .developer-card-front {
@@ -134,7 +138,7 @@ body.is-checkout #floating-cart {
 
 .developer-photo-wrapper {
   width: 100%;
-  height: 320px; /* Foto dibuat lebih panjang/tinggi */
+  height: 320px;
   overflow: hidden;
   background: #f8f9fa;
 }
@@ -153,8 +157,7 @@ body.is-checkout #floating-cart {
   align-items: center;
   padding: 15px;
   background: white;
-  /* GARIS DI BAWAH FOTO DIHAPUS */
-  border-top: none;
+  border-top: none; /* Menghilangkan garis sesuai permintaan sebelumnya */
 }
 
 .developer-card-back {
