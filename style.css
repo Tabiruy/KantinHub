@@ -100,7 +100,8 @@ body.is-checkout #floating-cart {
 .developer-card-inner {
   position: relative;
   width: 100%;
-  min-height: 380px; /* Ukuran lebih proporsional */
+  /* Dibuat lebih tinggi dari sebelumnya */
+  min-height: 450px;
   transform-style: preserve-3d;
   transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
 }
@@ -124,7 +125,7 @@ body.is-checkout #floating-cart {
 }
 
 .developer-card-flip:hover .developer-card-face {
-  border-color: var(--primary); /* Aksen kuning saat dihover */
+  border-color: #ffc107;
 }
 
 .developer-card-front {
@@ -133,7 +134,7 @@ body.is-checkout #floating-cart {
 
 .developer-photo-wrapper {
   width: 100%;
-  height: 240px;
+  height: 320px; /* Foto dibuat lebih panjang/tinggi */
   overflow: hidden;
   background: #f8f9fa;
 }
@@ -152,14 +153,15 @@ body.is-checkout #floating-cart {
   align-items: center;
   padding: 15px;
   background: white;
-  border-top: 4px solid var(--primary);
+  /* GARIS DI BAWAH FOTO DIHAPUS */
+  border-top: none;
 }
 
 .developer-card-back {
   transform: rotateY(180deg);
   align-items: center;
   justify-content: center;
-  background: #fffcf0; /* Latar belakang kuning sangat pudar */
+  background: #fffcf0;
   padding: 20px;
 }
 
@@ -175,7 +177,6 @@ body.is-checkout #floating-cart {
   width: 140px;
   height: 140px;
   object-fit: cover;
-  border-radius: 12px;
 }
 
 .social-links a {
@@ -186,33 +187,15 @@ body.is-checkout #floating-cart {
   justify-content: center;
   border-radius: 50%;
   background: #f8f9fa;
-  color: var(--dark);
+  color: #1a1d20;
   font-size: 1.1rem;
   transition: all 0.3s ease;
   text-decoration: none;
 }
 
 .social-links a:hover {
-  background: var(--primary);
+  background: #ffc107;
   color: white;
   transform: translateY(-3px);
   box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4);
-}
-
-.feature-card {
-  background: white;
-  border-radius: 18px;
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  transition: transform 0.3s ease;
-}
-
-.feature-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-}
-
-.dev-section-title {
-  display: inline-block;
-  border-bottom: 3px solid var(--primary);
-  padding-bottom: 5px;
 }
