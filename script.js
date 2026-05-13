@@ -1,11 +1,9 @@
-// 1. KONFIGURASI SUPABASE
 const SUPABASE_URL = "https://ciiqedrfocqzhhhsbtbb.supabase.co";
 const SUPABASE_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNpaXFlZHJmb2NxemhoaHNidGJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1MTA4MzYsImV4cCI6MjA5MzA4NjgzNn0.jaPVyYSA7XXEISY41ieIKXQkRwZBcWndBJiqfZnzKqU";
 const { createClient } = supabase;
 const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// 2. STATE APLIKASI
 let cart = [];
 let activeUser = localStorage.getItem("kantinHubUser") || null;
 let isAdmin = localStorage.getItem("kantinHubAdmin") === "true";
@@ -14,7 +12,6 @@ let activeKantinId = null;
 let dataKantin = [];
 let dataMenu = [];
 
-// 3. INISIALISASI
 document.addEventListener("DOMContentLoaded", () => {
   updateAuthUI();
 
@@ -48,7 +45,6 @@ function updateAuthUI() {
   }
 }
 
-// 4. FUNGSI DATA DARI SUPABASE
 async function fetchKantin() {
   const container = document.getElementById("kantin-container");
   container.innerHTML =
@@ -145,7 +141,6 @@ async function addReview() {
   btn.innerText = originalText;
 }
 
-// 5. FUNGSI RENDER UI
 function renderKantin() {
   const container = document.getElementById("kantin-container");
   if (dataKantin.length === 0) {
@@ -198,7 +193,6 @@ function renderMenu() {
     : '<p class="text-center w-100 text-muted mt-4">Menu belum tersedia di kantin ini.</p>';
 }
 
-// 6. LOGIKA KERANJANG & CHECKOUT
 function addToCart(menuId) {
   if (!activeUser) {
     new bootstrap.Modal(document.getElementById("loginModal")).show();
@@ -245,20 +239,17 @@ function toggleQR() {
   }
 }
 
-// 7. INTEGRASI SUPABASE (PENGIRIMAN DATA)
 async function confirmPayment() {
   if (cart.length === 0) return;
 
   const btn = document.querySelector("#checkout-section button.btn-warning");
   const originalText = btn.innerText;
 
-  // Loading state
   btn.innerText = "Memproses...";
   btn.disabled = true;
 
   const totalHarga = cart.reduce((sum, i) => sum + i.harga, 0);
 
-  // Kelompokkan item di keranjang
   const itemCounts = {};
   cart.forEach((item) => {
     itemCounts[item.nama] = (itemCounts[item.nama] || 0) + 1;
@@ -287,12 +278,10 @@ async function confirmPayment() {
 
     if (error) throw error;
 
-    // Sukses
     cart = [];
     document.getElementById("orderNote").value = "";
     updateCartUI();
 
-    // Sembunyikan modal login jika nyangkut, tampilkan sukses
     new bootstrap.Modal(document.getElementById("successModal")).show();
     showSection("home");
   } catch (err) {
@@ -308,7 +297,6 @@ async function confirmPayment() {
   }
 }
 
-// 8. SISTEM AUTH & NAVIGASI
 function setupLoginForm() {
   document.getElementById("loginForm").onsubmit = (e) => {
     e.preventDefault();
